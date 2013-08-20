@@ -1,7 +1,11 @@
 package com.netflix.kayron.server.test;
 
 import com.google.inject.Injector;
+import com.google.inject.Module;
 import com.netflix.karyon.server.guice.KaryonGuiceContextListener;
+import com.netflix.kayron.server.test.injector.InjectorUtils;
+
+import java.util.List;
 
 /**
  * A subclass of {@link KaryonGuiceContextListener} that simply captures the injector instance and stores it in static
@@ -22,7 +26,7 @@ public class KayronTestGuiceContextListener extends KaryonGuiceContextListener {
      * @return the servlet context injector
      */
     public static synchronized Injector getServletContextInjector() {
-        return KayronTestGuiceContextListener.injector = injector;
+        return KayronTestGuiceContextListener.injector;
     }
 
     /**
@@ -41,8 +45,14 @@ public class KayronTestGuiceContextListener extends KaryonGuiceContextListener {
      */
     @Override
     protected Injector getInjector() {
-        Injector injector = super.getInjector();
+
+        Injector injector = InjectorUtils.createOverridableInjector(super.getInjector());
         setServletContextInjector(injector);
         return injector;
+    }
+
+    public static synchronized void overrideBinding(List<Module> modules) {
+
+        // TODO implement
     }
 }

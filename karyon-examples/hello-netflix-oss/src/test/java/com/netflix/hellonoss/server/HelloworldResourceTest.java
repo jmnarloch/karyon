@@ -15,8 +15,12 @@
  */
 package com.netflix.hellonoss.server;
 
+import com.google.inject.Binder;
 import com.google.inject.Inject;
+import com.google.inject.Module;
+import com.netflix.hellonoss.core.HelloworldComponent;
 import com.netflix.hellonoss.utils.Deployments;
+import com.netflix.kayron.server.test.OverrideBinding;
 import com.netflix.kayron.server.test.RunInKaryon;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -48,6 +52,22 @@ public class HelloworldResourceTest {
         return Deployments.createDeployment();
     }
 
+    @OverrideBinding
+    public static Module createMocks() {
+
+        return new Module() {
+            @Override
+            public void configure(Binder binder) {
+
+                binder.bind(HelloworldComponent.class).toInstance(new HelloworldComponent() {
+                    public String getHelloString() {
+                        return "Hello from mock";
+                    }
+                });
+            }
+        };
+    }
+
     /**
      * The instance of the REST service.
      */
@@ -55,7 +75,7 @@ public class HelloworldResourceTest {
     private HelloworldResource instance;
 
     /**
-     * Test the {@link HelloworldResource#hello()}.
+     * Test the {@link HelloworldResource#hello()} method.
      */
     @Test
     public void shouldRetrieveHelloMessage() {
@@ -66,5 +86,19 @@ public class HelloworldResourceTest {
         // then
         assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
         assertEquals("{\"Message\":\"Hello Netflix OSS component!\"}", response.getEntity());
+    }
+
+    /**
+     * Test the {@link HelloworldResource#helloFromComponent()} method.
+     */
+    @Test
+    public void shouldRetrieveHelloMessageFromComponent() {
+
+        // when
+        Response response = instance.helloFromComponent();
+
+        // then
+        assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+        assertEquals("{\"Message\":\"Hello from mock\"}", response.getEntity());
     }
 }

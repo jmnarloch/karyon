@@ -15,10 +15,14 @@
  */
 package com.netflix.kayron.server.test.client;
 
+import com.netflix.kayron.server.test.KayronTestGuiceContextListener;
+import com.netflix.kayron.server.test.OverrideBinding;
 import com.netflix.kayron.server.test.RunInKaryon;
+import com.netflix.kayron.server.test.server.KayronBindingOverride;
 import com.netflix.kayron.server.test.server.KayronRemoteExtension;
 import com.netflix.kayron.server.test.server.KayronServerInitializer;
 import com.netflix.kayron.server.test.server.KayronTestEnricher;
+import com.netflix.kayron.server.test.server.SecurityActions;
 import org.jboss.arquillian.container.test.spi.RemoteLoadableExtension;
 import org.jboss.arquillian.container.test.spi.client.deployment.CachedAuxilliaryArchiveAppender;
 import org.jboss.shrinkwrap.api.Archive;
@@ -65,9 +69,13 @@ public class KayronExtensionArchiveAppender extends CachedAuxilliaryArchiveAppen
 
         // adds the 'API' classes
         archive.addClass(RunInKaryon.class);
+        archive.addClass(OverrideBinding.class);
+        archive.addClass(KayronTestGuiceContextListener.class);
 
         // adds the implementation classes
         archive.addClass(KayronRemoteExtension.class);
+        archive.addClass(KayronBindingOverride.class);
+        archive.addClass(SecurityActions.class);
         archive.addClass(KayronServerInitializer.class);
         archive.addClass(KayronTestEnricher.class);
 

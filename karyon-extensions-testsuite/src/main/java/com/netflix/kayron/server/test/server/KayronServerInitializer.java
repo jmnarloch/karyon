@@ -2,7 +2,7 @@ package com.netflix.kayron.server.test.server;
 
 import com.netflix.kayron.server.test.RunInKaryon;
 import org.jboss.arquillian.core.api.annotation.Observes;
-import org.jboss.arquillian.test.spi.event.suite.Before;
+import org.jboss.arquillian.test.spi.event.suite.BeforeClass;
 
 /**
  * A test initializer that sets up the Kayron environment in the server.
@@ -16,7 +16,7 @@ public class KayronServerInitializer {
      *
      * @param event the before test event
      */
-    public void beforeTest(@Observes Before event) {
+    public void beforeTest(@Observes BeforeClass event) {
 
         RunInKaryon annotation = event.getTestClass().getAnnotation(RunInKaryon.class);
 

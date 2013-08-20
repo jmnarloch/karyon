@@ -35,6 +35,7 @@ public class KayronRemoteExtension implements RemoteLoadableExtension {
 
         // registers the test enricher
         builder.service(TestEnricher.class, KayronTestEnricher.class)
-                .observer(KayronServerInitializer.class);
+                .observer(KayronServerInitializer.class)
+                .observer(KayronBindingOverride.class);
     }
 }
